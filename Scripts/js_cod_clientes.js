@@ -1,0 +1,42 @@
+﻿var p_empresa = "";
+
+$(document).ready(function () {
+
+    //Obtengo el id_empresa
+    var id_empresa = $(window.parent.document).find("#txt_id_empresa").val();
+    
+    $('.textbox_cod_cliente').autocomplete({
+        minLength: 1,
+        source: function (request, response) {
+            $.ajax({
+                type: "POST",
+                url: '../default.aspx/autocompleta_cod_cliente',
+                data: "{'prefix': '" + request.term + "','id_empresa': '" + id_empresa + "'}",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    response($.map(data.d, function (item) {
+                        var compuesto = item.split("|");
+                        return {
+
+                            label: "Cod: " + compuesto[0] + " - " + compuesto[1] + " (" + compuesto[2] + ")",
+                            val: item
+                        };
+                    }));
+                },
+                error: function (response) { alert(response.responseText); },
+                failure: function (response) { alert(response.responseText); }
+            });
+        },
+        focus: function (event, ui) {
+            return false;
+        },
+        select: function (event, ui) {
+            //descompongo resultados
+            var compuesto = ui.item.val.split("|");
+            $('#' + this.id + '').val(compuesto[0]);
+            return false;
+        }
+    });
+
+});

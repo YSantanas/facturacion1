@@ -1,0 +1,113 @@
+﻿.transparent_negro {
+    position: absolute;
+    top: 1px;
+    bottom: 1px;
+    left: 1px;
+    right: 1px;
+    z-index: 1;
+    opacity: 0.80;
+    background-color: black;
+    background-size: cover; 
+}
+
+#tabreloj {
+    position: absolute;
+    top: -0px;
+    width: 100%;
+    z-index: 2;
+    font-weight: 400;
+}
+
+/*Card component*/
+.card-container.card {
+    max-width: 350px;
+    padding: 40px 40px;
+    border: 0px;
+    z-index: 2;
+    -webkit-box-shadow: 0px 0px 30px -6px rgba(255,255,255,0.95);
+    -moz-box-shadow: 0px 0px 30px -6px rgba(255,255,255,0.95);
+    box-shadow: 0px 0px 30px -6px rgba(255,255,255,0.95);
+    background-color: white;
+    margin-top: 150px;
+}
+
+.card {
+    background-color: transparent;
+    /* just in case there no content*/
+    padding: 20px 25px 30px;
+    margin: 0 auto 25px;
+    
+}
+
+.form-signin input[type=email],
+.form-signin input[type=password],
+.form-signin input[type=text],
+.form-signin button {
+    width: 100%;
+    display: block;
+    margin-bottom: 10px;
+    z-index: 1;
+    position: relative;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: green !important;
+}
+
+.custom-checkbox .custom-control-input:checked:focus ~ .custom-control-label::before {
+    box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 255, 0, 0.25)
+}
+
+.custom-checkbox .custom-control-input:focus ~ .custom-control-label::before {
+    box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 0, 0, 0.25)
+}
+
+.custom-checkbox .custom-control-input:active ~ .custom-control-label::before {
+    /*background-color: #C8FFC8;*/
+}
+
+.textarea:focus, input:focus, input[type]:focus {
+    /*border-color: rgb(21, 87, 36);
+    box-shadow: 0 1px 1px rgba(212, 237, 218, 0.075)inset, 0px 0px 2px 5px rgba(212,237,218,0.88);
+    outline: 0 none;*/
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+
+#modal_mantenimiento {
+    padding-right: 0px;
+}
+
+#modal_mantenimiento .modal-dialog {
+    top: 20%;
+}
+
+#modal_mantenimiento .modal-body {
+    color: #0d6efd;
+}
+
+a:link {
+    color: #0d6efd;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #0d6efd;
+}
+
+a:focus {
+    color: #0d6efd;
+}
+
+a:hover {
+    color: #0d6efd;
+}
+
+a:active {
+    color: #0d6efd;
+}

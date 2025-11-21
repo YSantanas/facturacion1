@@ -1,0 +1,185 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Site.master.cs" Inherits="SiteMaster" %>
+<!DOCTYPE html>
+<html lang="es">
+<head runat="server">
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><asp:ContentPlaceHolder ID="TitleContent" runat="server" /></title>
+
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- Bootstrap Table CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.css" />
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+</head>
+
+<body>
+    <form id="form1" runat="server">
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+                <div class="container">
+
+
+                    <!-- Menú colapsable -->
+<div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+    <ul class="navbar-nav">
+
+        <li class="nav-item">
+            <a class="nav-link d-flex flex-column align-items-center text-white" href="#">
+                <img src="~/Imagenes/img/doctor.png" runat="server" alt="Médicos" class="icon-menu mb-1" />
+                Médicos
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link d-flex flex-column align-items-center text-white" href="#">
+                <img src="~/Imagenes/img/citas.png"  runat="server" alt="Citas" class="icon-menu mb-1" />
+                Citas
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link d-flex flex-column align-items-center text-white" href="#">
+                <img src="~/Imagenes/img/pacientes.png"  runat="server" alt="Pacientes" class="icon-menu mb-1" />
+                Pacientes
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link d-flex flex-column align-items-center text-white" href="#">
+                <img src="~/Imagenes/img/nuevos.png"  runat="server" alt="Nuevos" class="icon-menu mb-1" />
+                Nuevos
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link d-flex flex-column align-items-center text-white" href="#">
+                <img src="~/Imagenes/img/reen.png"  runat="server" alt="Regeneración" class="icon-menu mb-1" />
+                Regeneración
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link d-flex flex-column align-items-center text-white" href="#">
+                <img src="~/Imagenes/img/facturas.png"  runat="server" alt="Facturas" class="icon-menu mb-1" />
+                Facturas
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link d-flex flex-column align-items-center text-white" href="#">
+                <img src="~/Imagenes/img/gastos.png"  runat="server" alt="Gastos" class="icon-menu mb-1" />
+                Gastos
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link d-flex flex-column align-items-center text-white" href="#">
+                <img src="~/Imagenes/img/productos.png"  runat="server" alt="Productos" class="icon-menu mb-1" />
+                Productos
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link d-flex flex-column align-items-center text-white" href="#">
+                <img src="~/Imagenes/img/panes.png"  runat="server" alt="Panes" class="icon-menu mb-1" />
+                Panes
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link d-flex flex-column align-items-center text-white" href="#">
+                <img src="~/Imagenes/img/calculadora.png"  runat="server" alt="Calculadora" class="icon-menu mb-1" />
+                Calculadora
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link d-flex flex-column align-items-center text-white" href="#">
+                <img src="~/Imagenes/img/tablas.png"  runat="server" alt="Tablas" class="icon-menu mb-1" />
+                Tablas
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link d-flex flex-column align-items-center text-white" href="#">
+                <img src="~/Imagenes/img/config.png"  runat="server" alt="Config" class="icon-menu mb-1" />
+                Config
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link d-flex flex-column align-items-center text-white" href="#">
+                <img src="~/Imagenes/img/historico.png"  runat="server" alt="Historico" class="icon-menu mb-1" />
+                Historico
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link d-flex flex-column align-items-center text-white" href="#">
+                <img src="~/Imagenes/img/informes.png"  runat="server" alt="Informes" class="icon-menu mb-1" />
+                Informes
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link d-flex flex-column align-items-center text-white" href="#">
+                <img src="~/Imagenes/img/info.png"  runat="server" alt="Acerca" class="icon-menu mb-1" />
+                Acerca
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link d-flex flex-column align-items-center text-warning" href="#">
+                <img src="~/Imagenes/img/salir.png"  runat="server" alt="Salir" class="icon-menu mb-1" />
+                Salir
+            </a>
+        </li>
+
+    </ul>
+</div>
+
+
+                </div>
+            </nav>
+        </header>
+
+        <main class="container-fluid mt-4">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+        </main>
+
+        <footer class="footer mt-5 p-3 bg-dark text-white text-center">
+            <p>&copy; 2025 Yvette Santana Sanchez</p>
+            <p style="font-size: 12px;">
+                <i>Desarrollado y diseñado por
+                    <a href="https://github.com/YSantanas" target="_blank"
+                        style="text-decoration: none; color: rgb(41, 227, 255); font-weight: bold;">
+                        M. Yvette Santana Sánchez
+                    </a>
+                </i>
+            </p>
+        </footer>
+    </form>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.21.2/dist/locale/bootstrap-table-es-ES.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+﻿body {
+    width:100%;
+    height: 100%;
+    background-color: white;
+}
+
+.posicion_hora {
+    position: absolute;
+    top: -6px;
+    right: 2px;
+}
+
+.panel-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.panel-left {
+    flex: 0 0 auto;
+    /* only manually resize */
+    padding: 10px;
+    width: 300px;
+    min-width: 200px;
+    white-space: nowrap;
+    background: #FFF;
+    color: white;
+}
+
+.splitter {
+    flex: 0 0 auto;
+    width: 2px;
+    background-color: #0d6efd;
+    min-height: 200px;
+    cursor: col-resize;
+}
+
+.panel-right {
+    flex: 1 1 auto;
+    /* resizable */
+    padding: 10px;
+    width: 100%;
+    min-width: 200px;
+    overflow: auto;
+}
+
+.form-control:focus {
+    /*border-color: rgb(21, 87, 36) !important;
+    box-shadow: 0 1px 1px rgba(212, 237, 218, 0.075)inset, 0px 0px 2px 5px rgba(212,237,218,0.88);
+    outline: 0 none;*/
+}
+
+.GridPager a,
+.GridPager span {
+    display: inline-block;
+    padding: 0px 9px;
+    margin-right: 4px;
+    border-radius: 3px;
+    color: black;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.GridPager a {
+    border: 1px solid #cce5ff;
+    background-color: #f5f5f5;
+    color: black;
+}
+
+.GridPager span {
+    background: #cce5ff;
+}
+
+.datepicker table tr td.active.active {
+    background: #d4edda;
+    border: 1px solid #155724;
+    color: #155724;
+}
+
+#lbl_informacion, #lbl_informacion2 {
+    font-size: 12px;
+}
+
+.ui-helper-hidden-accessible {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.ui-autocomplete {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1510 !important;
+    float: left;
+    display: none;
+    min-width: 160px;
+    height: 250px;
+    overflow: auto;
+    padding-top: 4px;
+    padding-left: 5px;
+    list-style: none;
+    background-color: #ffffff;
+    border: 1px solid #004085;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    border-color: rgb(21, 87, 36) !important;
+    box-shadow: 0 1px 1px rgba(204, 229, 255, 0.075)inset, 0px 0px 2px 5px rgba(204,229,255,0.88);
+    outline: 0 none;
+    font-size: 15px;
+}
+
+.ui-state-hover, .ui-state-active {
+    cursor: pointer;
+    text-decoration: none;
+    background-color: #004085 !important;
+    color: white;
+}
+
+.gv_verde {
+    background: rgba(212,237,218,0.52) !important;
+}
+
+.gv_rojo {
+    background-color: rgba(248,215,218,0.52) !important;
+}
+
+.marca {
+    border-right: 2px solid #155724 !important;
+}
+
+.gv_azul {
+   background-color: #B6DBFF !important;
+}
+
+.gvHeaderright {
+    text-align: right;
+}
+
+.gvHeaderCenter {
+    text-align: center;
+}
+
+.gvHeaderleft {
+    text-align: left;
+}
+
+.borde_entradas {
+    border: 1px solid #b3b3b3;
+    padding: 5px;
+    border-radius: 3px;
+    background-color :white;
+}
+
+#ventana_repetitivos {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    z-index: 1000;
+    width: 80%;
+    display: none;
+    background-color: white;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    -webkit-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.4);
+    -moz-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.4);
+    box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.4);
+    /*border: 1px solid #155724;*/
+    border-left: 1px solid #155724;
+    border-top: 1px solid #155724;
+    border-bottom: 1px solid #155724;
+}
+
+.textbox_blanco {
+    border: 1px solid white;
+    background-color: white;
+}
+
+.textbox_blanco:focus {
+    border-color: rgb(21, 87, 36) !important;
+    box-shadow: 0 1px 1px rgba(212, 237, 218, 0.075)inset, 0px 0px 2px 5px rgba(212,237,218,0.88);
+    outline: 0 none;
+}
+
+#ventana_historico {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    z-index: 1000;
+    width: 50%;
+    display: none;
+    background-color: white;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    -webkit-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.4);
+    -moz-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.4);
+    box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.4);
+    /*border: 1px solid #155724;*/
+    border-left: 1px solid #155724;
+    border-top: 1px solid #155724;
+    border-bottom: 1px solid #155724;
+}
+
+#boton_historico {
+    position: absolute;
+    top: 43px;
+    right: 0px;
+    width: 30px;
+    height: 100px;
+}
+
+#recomendacion {
+    position: absolute;
+    top: 0px;
+    right: 70px;
+    z-index: 1000;
+    width: 30%;
+    height: 250px;
+    display: none;
+    background-color: white;
+    border-radius: 5px;
+    -webkit-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.4);
+    -moz-box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.4);
+    box-shadow: 0px 0px 13px 1px rgba(0,0,0,0.4);
+    border: 1px solid #155724;
+}
+
+#img_cerrar_recomendacion {
+    position:absolute;
+    top:10px;
+    right:10px;
+}

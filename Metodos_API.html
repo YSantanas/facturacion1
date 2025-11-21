@@ -1,0 +1,342 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+
+    <!-- BOOTSTRAP & JQUERY--------------------------------------------------------------------------------------------->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+
+            //-------------------------------------------------------------------------------------------------------------------
+            //Control para el click
+            $("#Button1").on('click', function (e) {
+
+                //1) Grabamos la cabecera de asientos
+                //var keycode = 'EApih35G/FboUyyKnHpJ21lV0GErzm4UiTa9j0xbLZ7G78JSCJMCl1UMeX7E8Cet7D6VmKMDvXg5FdhIctPPuPzCdLkIbVqaozWBGdXAznaoqDlnxekcK6GgQbFjVCmyjbZnSnfsqeQpsVmzBDcGYXzuUn4M0yiosCIR/y9EY/Spo9tAVPEX0kU3l865NXhoV3Odh59qQDblpRJaxM9763vpJiDHF4LCjAyRojWrd82emsjd2ZIoqmC1vBoxetbnlybRAhdA6iVGr9rksYZVeEC+J6OX6GPSvxHpMUmBtoEAMGjZ1EOoVMx69mek4tZovMS2pXBn8I+rLdOdOxD/C4JG1W6VPH9a1xYVyXYSzK5IEa1WiJj6Mh+oVCNZ5LGnsrfCn0oLYpW+8JOTCFApG3G4k+euO3mbcVumn47oQNhLmzotXlhZ8/AXMMcA5oGX+w==';
+                var keycode = 'EFTC7HaawbDUqhq0US6lDevkOmYgCzdoelaiS/jsi/BVuwesOHunD1n8+KzDz/MtwLlhLaU6JdKdUbIMzlJwIaphcJ9w3H2SZd07YwLiB9R1L2m3x5te2DrNdfVpf5nOb6O/L3ExcShVstAeJel3nXvFArG4kZkf9/Gk7ORCCE3uGwMaJi9HFuFXb9RiPaErIKGHjmx/x9NJz0zEViLVWSrUYkPvF8JQcYpBMEHUFRwsdegc88ERfDHcVUCSibb7UY5FanEWKnxiMI/cfHRnzkLvqaweLS9z+LueNazQz9/uz1xLW5GfUV/XIAR2BEXoACZBiSX+5fsDgU1KPnYxT6GsW498QNUM9HusucxJzgDSVMyfOH0cCaL72FuMe1TWeZ7LiuMDJxnGe59k6QWNCvJIZhsy+BywmhwLLj/RFMr55MwGYDEVEMnbrz3iv+U2ZiMRVwsXV7kpyDi4N3F53c8='
+                var datos = "01/01/2049|1&|430241102||4203|COBRO FRA. 4203 - 783316|0|26.69& |430237893||4216|COBRO FRA. 4216 - 786498|0|33.34& |430240588||4194|COBRO FRA. 4194 - 781934|0|20.67& |430266917||2543|COBRO FRA. 2543 - 770275|0|25.59& |570200000||2073|COBRO FRA. 2073 - 770271|0|25.59& |572000019||2072|COBRO FRA. 2072 - 770270|0|25.59& |570200000|||ENTRADA DE CAJA|157.47|0& |572000019|||INGRESO. INGRESO PORTES TALON BBVA TNF|97.44|0& |570200000|||SALIDA DE CAJA|0|97.44& |572000035|||INGRESO. INGRESO EFECTIVO BBVA TNF|60.03|0& |570200000|||SALIDA DE CAJA|0|60.03"
+
+                $.ajax({
+                    async: false,
+                    type: "POST",
+                    url: "http://localhost:81/io/contabilidad/WS_IOcontabilidad.asmx/API_asientos",
+                    data: '{KeyCode: "' + keycode + '",datos: "' + datos + '"}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        //Asigno
+                            $("#lbl_id_cabecera_asiento").text(data.d)
+                    },
+                    error: function errores(msg) { alert('Error: ' + msg.responseText); }
+                });
+
+                //url: "http://localhost:81/io/contabilidad/WS_IOcontabilidad.asmx/API_asientos",
+                //url: "https://www.iocloudcomputing.io/contabilidad/WS_IOcontabilidad.asmx/API_asientos",
+                ////2) Obtenemos el Nº del Asiento generado automáticamente
+                //var n_asiento = '';
+                //$.ajax({
+                //    async: false,
+                //    type: "POST",
+                //    url: "https://www.cloudprojects.es/contabilidad/WS_CloudProjects.asmx/Obtener_datos",
+                //    data: '{KeyCode: "' + keycode + '",query: "SELECT referencia_asiento FROM cabecera_asientos WHERE Id=' + id_cabecera_asiento + ';"}',
+                //    contentType: "application/json; charset=utf-8",
+                //    dataType: "json",
+                //    success: function (data) {
+                //        //Asigno
+                //        n_asiento = data.d
+                //        $("#lbl_n_asiento").text(n_asiento)
+                //    },
+                //    error: function errores(msg) { alert('Error: ' + msg.responseText); }
+                //});
+
+                //var n_impuesto = '';
+                //$.ajax({
+                //    async: false,
+                //    type: "POST",
+                //    url: "https://www.cloudprojects.es/contabilidad/WS_CloudProjects.asmx/Grabar_cabecera_impuesto",
+                //    data: '{KeyCode: "' + keycode + '",fecha_expedicion: "18/10/2021", fecha_realizacion: "23/11/2021", cuenta: "430504941", tipo_impuesto: "IGIC REPERCUTIDO",cuenta_cancelacion:"", efectivo: "False", serie:"", n_factura:"Nº factura", concepto:"Prueba del concepto", base_retencion: 0,porcentaje_retencion: 0,cuota_retencion:0,cuenta_retencion:"",total_factura:-25.6, chb_retencion:"False", prorrata:"",chb_minorista:"False", chb_exento:"False",chb_re:"False",chb_prorrata:"False",chb_no_sujeto:"False", denominacion_tipo_asiento:"Tipo A", referencia_asiento:"",n_asiento:"' + n_asiento + '",id_cabecera_asiento: ' + id_cabecera_asiento + '}',
+                //    contentType: "application/json; charset=utf-8",
+                //    dataType: "json",
+                //    success: function (data) {
+                //        //Asigno
+                //        n_impuesto = data.d
+                //        $("#lbl_n_impuesto").text(n_impuesto)
+                //    },
+                //    error: function errores(msg) { alert('Error: ' + msg.responseText); }
+                //});
+
+                ////4) Grabado los detalles de impuestos
+                //$.ajax({
+                //    async: false,
+                //    type: "POST",
+                //    url: "https://www.cloudprojects.es/contabilidad/WS_CloudProjects.asmx/Grabar_detalles_impuestos",
+                //    data: '{KeyCode: "' + keycode + '",Id_cabecera_impuesto: "' + n_impuesto + '", n_asiento: "' + n_asiento + '", id_cabecera_asiento: ' + id_cabecera_asiento + ', chb_exento: "False", clave: "1 - Cuotas soportadas en operaciones interiores, Bienes y servicios corrientes.", porcentaje: 7, cuota:82.20, base: 1174.36,porcentaje_re:0, cuota_re: 0, cuenta_re: "",cuenta_cuota:"4727000000", cuenta_base:"6000000001",porcentaje_minorista: 0, cuota_minorista: 0, cuota_prorrata: 0,cuota_deducible: 0, base_calculada: 100.55,intracomunitaria_inversion_sujeto: "No",suma_base: "True", suma_cuota:"True", cuadre_importacion:"False"}',
+                //    contentType: "application/json; charset=utf-8",
+                //    dataType: "json",
+                //    success: function (data) {
+                //        //Asigno
+                //        $("#lbl_detalles_impuestos").text(data.d)
+                //    },
+                //    error: function errores(msg) { alert('Error: ' + msg.responseText); }
+                //});
+
+                ////5 Grabacion de Asientos (Un impuesto normal genera 3 lineas de asiento)
+                //$.ajax({
+                //    async: false,
+                //    type: "POST",
+                //    url: "https://www.cloudprojects.es/contabilidad/WS_CloudProjects.asmx/Grabar_detalles_asiento",
+                //    data: '{KeyCode: "' + keycode + '",Id_cabecera_asiento: "' + id_cabecera_asiento + '", referencia:"" ,cuenta: "4000000001", serie: "", factura: "Nº factura", concepto:"Prueba del concepto", debe:0, haber: 1256.56, id_cobrador:0 , id_banco_empresa:0,id_banco_cliente:0,id_forma_pago:0,origen:"Impuestos",id_cabecera_impuesto: "' + n_impuesto +'"}',
+                //    contentType: "application/json; charset=utf-8",
+                //    dataType: "json",
+                //    success: function (data) {
+                //        //Asigno
+                //        $("#lbl_id_detalles_asiento1").text(data.d)
+                //    },
+                //    error: function errores(msg) { alert('Error: ' + msg.responseText); }
+                //});
+
+                //$.ajax({
+                //    async: false,
+                //    type: "POST",
+                //    url: "https://www.cloudprojects.es/contabilidad/WS_CloudProjects.asmx/Grabar_detalles_asiento",
+                //    data: '{KeyCode: "' + keycode + '",Id_cabecera_asiento: "' + id_cabecera_asiento + '", referencia:"" ,cuenta: "4727000000", serie: "", factura: "Nº factura", concepto:"Prueba del concepto", debe:82.20, haber: 0, id_cobrador:0 , id_banco_empresa:0,id_banco_cliente:0,id_forma_pago:0,origen:"Impuestos",id_cabecera_impuesto: "' + n_impuesto + '"}',
+                //    contentType: "application/json; charset=utf-8",
+                //    dataType: "json",
+                //    success: function (data) {
+                //        //Asigno
+                //        $("#lbl_id_detalles_asiento2").text(data.d)
+                //    },
+                //    error: function errores(msg) { alert('Error: ' + msg.responseText); }
+                //});
+
+                //$.ajax({
+                //    async: false,
+                //    type: "POST",
+                //    url: "https://www.cloudprojects.es/contabilidad/WS_CloudProjects.asmx/Grabar_detalles_asiento",
+                //    data: '{KeyCode: "' + keycode + '",Id_cabecera_asiento: "' + id_cabecera_asiento + '", referencia:"" ,cuenta: "6000000000", serie: "", factura: "Nº factura", concepto:"Prueba del concepto", debe:1174.36, haber: 0, id_cobrador:0 , id_banco_empresa:0,id_banco_cliente:0,id_forma_pago:0,origen:"Impuestos",id_cabecera_impuesto: "' + n_impuesto + '"}',
+                //    contentType: "application/json; charset=utf-8",
+                //    dataType: "json",
+                //    success: function (data) {
+                //        //Asigno
+                //        $("#lbl_id_detalles_asiento3").text(data.d)
+                //    },
+                //    error: function errores(msg) { alert('Error: ' + msg.responseText); }
+                //});
+
+            })
+
+            //-------------------------------------------------------------------------------------------------------------------
+            //Control para el click
+            $("#Button2").on('click', function (e) {
+
+                //1) Grabamos la cabecera de asientos
+                var keycode = 'EFTC7HaawbDUqhq0US6lDevkOmYgCzdoelaiS/jsi/BVuwesOHunD1n8+KzDz/MtwLlhLaU6JdKdUbIMzlJwIaphcJ9w3H2SZd07YwLiB9R1L2m3x5te2DrNdfVpf5nOb6O/L3ExcShVstAeJel3nXvFArG4kZkf9/Gk7ORCCE3uGwMaJi9HFuFXb9RiPaErIKGHjmx/x9NJz0zEViLVWSrUYkPvF8JQcYpBMEHUFRwsdegc88ERfDHcVUCSibb7UY5FanEWKnxiMI/cfHRnzkLvqaweLS9z+LueNazQz9/uz1xLW5GfUV/XIAR2BEXoACZBiSX+5fsDgU1KPnYxT6GsW498QNUM9HusucxJzgDSVMyfOH0cCaL72FuMe1TWeZ7LiuMDJxnGe59k6QWNCvJIZhsy+BywmhwLLj/RFMr55MwGYDEVEMnbrz3iv+U2ZiMRVwsXV7kpyDi4N3F53c8=';;
+                //var keycode = 'EFTC7HaawbDUqhq0US6lDevkOmYgCzdoelaiS/jsi/BVuwesOHunD1n8+KzDz/MtwLlhLaU6JdKdUbIMzlJwIaphcJ9w3H2SZd07YwLiB9R1L2m3x5te2DrNdfVpf5nOb6O/L3ExcShVstAeJel3nXvFArG4kZkf9/Gk7ORCCE3uGwMaJi9HFuFXb9RiPaErIKGHjmx/x9NJz0zEViLVWSrUYkPvF8JQcYpBMEHUFRwsdegc88ERfDHcVUCSibb7UY5FanEWKnxiMI/cfHRnzkLvqaweLS9z+LueNazQz9/uz1xLW5GfUV/XIAR2BEXoACZBiSX+5fsDgU1KPnYxT6GsW498QNUM9HusucxJzgDSVMyfOH0cCaL72FuMe1TWeZ7LiuMDJxnGe59k6QWNCvJIZhsy+BywmhwLLj/RFMr55MwGYDEVEMnbrz3iv+U2ZiMRVwsXV7kpyDi4N3F53c8='
+                var datos = "06/07/2022|06/07/2022|430366666|IGIC REPERCUTIDO| |0| |4356|N/FRA. 4356|0|0|0| |28.27|0| |0|0|0|0|0|Tipo A| &False|1 - Régimen Ordinario.|0|0.00|7.84|0|0| |477000000|705200001|0|0|0|0.00|7.84|No|1|1|0&False|1 - Régimen Ordinario.|3.00|0.5484|18.28|0|0| |477000000|705200001|0|0|0|0.5484|18.28|No|1|1|0&False|1 - Régimen Ordinario.|7.00|0.1050|1.50|0|0| |477000000|705200002|0|0|0|0.1050|1.50|No|1|1|0"
+
+                $.ajax({
+                    async: false,
+                    type: "POST",
+                    url: "http://localhost:81/io/contabilidad/WS_IOcontabilidad.asmx/API_Impuestos",
+                    data: '{KeyCode: "' + keycode + '",datos: "' + datos + '"}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        //Asigno
+                        $("#lbl_n_impuesto").text(data.d)
+                    },
+                    error: function errores(msg) { alert('Error: ' + msg.responseText); }
+                });
+
+                //url: "http://localhost:81/io/contabilidad/WS_IOcontabilidad.asmx/API_asientos",
+                //url: "https://www.iocloudcomputing.io/contabilidad/WS_IOcontabilidad.asmx/API_asientos",
+                ////2) Obtenemos el Nº del Asiento generado automáticamente
+                //var n_asiento = '';
+                //$.ajax({
+                //    async: false,
+                //    type: "POST",
+                //    url: "https://www.cloudprojects.es/contabilidad/WS_CloudProjects.asmx/Obtener_datos",
+                //    data: '{KeyCode: "' + keycode + '",query: "SELECT referencia_asiento FROM cabecera_asientos WHERE Id=' + id_cabecera_asiento + ';"}',
+                //    contentType: "application/json; charset=utf-8",
+                //    dataType: "json",
+                //    success: function (data) {
+                //        //Asigno
+                //        n_asiento = data.d
+                //        $("#lbl_n_asiento").text(n_asiento)
+                //    },
+                //    error: function errores(msg) { alert('Error: ' + msg.responseText); }
+                //});
+
+                //var n_impuesto = '';
+                //$.ajax({
+                //    async: false,
+                //    type: "POST",
+                //    url: "https://www.cloudprojects.es/contabilidad/WS_CloudProjects.asmx/Grabar_cabecera_impuesto",
+                //    data: '{KeyCode: "' + keycode + '",fecha_expedicion: "18/10/2021", fecha_realizacion: "23/11/2021", cuenta: "430504941", tipo_impuesto: "IGIC REPERCUTIDO",cuenta_cancelacion:"", efectivo: "False", serie:"", n_factura:"Nº factura", concepto:"Prueba del concepto", base_retencion: 0,porcentaje_retencion: 0,cuota_retencion:0,cuenta_retencion:"",total_factura:-25.6, chb_retencion:"False", prorrata:"",chb_minorista:"False", chb_exento:"False",chb_re:"False",chb_prorrata:"False",chb_no_sujeto:"False", denominacion_tipo_asiento:"Tipo A", referencia_asiento:"",n_asiento:"' + n_asiento + '",id_cabecera_asiento: ' + id_cabecera_asiento + '}',
+                //    contentType: "application/json; charset=utf-8",
+                //    dataType: "json",
+                //    success: function (data) {
+                //        //Asigno
+                //        n_impuesto = data.d
+                //        $("#lbl_n_impuesto").text(n_impuesto)
+                //    },
+                //    error: function errores(msg) { alert('Error: ' + msg.responseText); }
+                //});
+
+                ////4) Grabado los detalles de impuestos
+                //$.ajax({
+                //    async: false,
+                //    type: "POST",
+                //    url: "https://www.cloudprojects.es/contabilidad/WS_CloudProjects.asmx/Grabar_detalles_impuestos",
+                //    data: '{KeyCode: "' + keycode + '",Id_cabecera_impuesto: "' + n_impuesto + '", n_asiento: "' + n_asiento + '", id_cabecera_asiento: ' + id_cabecera_asiento + ', chb_exento: "False", clave: "1 - Cuotas soportadas en operaciones interiores, Bienes y servicios corrientes.", porcentaje: 7, cuota:82.20, base: 1174.36,porcentaje_re:0, cuota_re: 0, cuenta_re: "",cuenta_cuota:"4727000000", cuenta_base:"6000000001",porcentaje_minorista: 0, cuota_minorista: 0, cuota_prorrata: 0,cuota_deducible: 0, base_calculada: 100.55,intracomunitaria_inversion_sujeto: "No",suma_base: "True", suma_cuota:"True", cuadre_importacion:"False"}',
+                //    contentType: "application/json; charset=utf-8",
+                //    dataType: "json",
+                //    success: function (data) {
+                //        //Asigno
+                //        $("#lbl_detalles_impuestos").text(data.d)
+                //    },
+                //    error: function errores(msg) { alert('Error: ' + msg.responseText); }
+                //});
+
+                ////5 Grabacion de Asientos (Un impuesto normal genera 3 lineas de asiento)
+                //$.ajax({
+                //    async: false,
+                //    type: "POST",
+                //    url: "https://www.cloudprojects.es/contabilidad/WS_CloudProjects.asmx/Grabar_detalles_asiento",
+                //    data: '{KeyCode: "' + keycode + '",Id_cabecera_asiento: "' + id_cabecera_asiento + '", referencia:"" ,cuenta: "4000000001", serie: "", factura: "Nº factura", concepto:"Prueba del concepto", debe:0, haber: 1256.56, id_cobrador:0 , id_banco_empresa:0,id_banco_cliente:0,id_forma_pago:0,origen:"Impuestos",id_cabecera_impuesto: "' + n_impuesto +'"}',
+                //    contentType: "application/json; charset=utf-8",
+                //    dataType: "json",
+                //    success: function (data) {
+                //        //Asigno
+                //        $("#lbl_id_detalles_asiento1").text(data.d)
+                //    },
+                //    error: function errores(msg) { alert('Error: ' + msg.responseText); }
+                //});
+
+                //$.ajax({
+                //    async: false,
+                //    type: "POST",
+                //    url: "https://www.cloudprojects.es/contabilidad/WS_CloudProjects.asmx/Grabar_detalles_asiento",
+                //    data: '{KeyCode: "' + keycode + '",Id_cabecera_asiento: "' + id_cabecera_asiento + '", referencia:"" ,cuenta: "4727000000", serie: "", factura: "Nº factura", concepto:"Prueba del concepto", debe:82.20, haber: 0, id_cobrador:0 , id_banco_empresa:0,id_banco_cliente:0,id_forma_pago:0,origen:"Impuestos",id_cabecera_impuesto: "' + n_impuesto + '"}',
+                //    contentType: "application/json; charset=utf-8",
+                //    dataType: "json",
+                //    success: function (data) {
+                //        //Asigno
+                //        $("#lbl_id_detalles_asiento2").text(data.d)
+                //    },
+                //    error: function errores(msg) { alert('Error: ' + msg.responseText); }
+                //});
+
+                //$.ajax({
+                //    async: false,
+                //    type: "POST",
+                //    url: "https://www.cloudprojects.es/contabilidad/WS_CloudProjects.asmx/Grabar_detalles_asiento",
+                //    data: '{KeyCode: "' + keycode + '",Id_cabecera_asiento: "' + id_cabecera_asiento + '", referencia:"" ,cuenta: "6000000000", serie: "", factura: "Nº factura", concepto:"Prueba del concepto", debe:1174.36, haber: 0, id_cobrador:0 , id_banco_empresa:0,id_banco_cliente:0,id_forma_pago:0,origen:"Impuestos",id_cabecera_impuesto: "' + n_impuesto + '"}',
+                //    contentType: "application/json; charset=utf-8",
+                //    dataType: "json",
+                //    success: function (data) {
+                //        //Asigno
+                //        $("#lbl_id_detalles_asiento3").text(data.d)
+                //    },
+                //    error: function errores(msg) { alert('Error: ' + msg.responseText); }
+                //});
+
+            })
+            ////-------------------------------------------------------------------------------------------------------------------
+            ////Control para el click
+            //$("#Button2").on('click', function (e) {
+
+            //    //1) Grabamos la cabecera de asientos
+            //    var keycode = 'EApih35G/FboUyyKnHpJ21lV0GErzm4UiTa9j0xbLZ7G78JSCJMCl1UMeX7E8Cet7D6VmKMDvXg5FdhIctPPuPzCdLkIbVqaozWBGdXAznaoqDlnxekcK6GgQbFjVCmyjbZnSnfsqeQpsVmzBDcGYXzuUn4M0yiosCIR/y9EY/Spo9tAVPEX0kU3l865NXhoV3Odh59qQDblpRJaxM9763vpJiDHF4LCjAyRojWrd82emsjd2ZIoqmC1vBoxetbnlybRAhdA6iVGr9rksYZVeEC+J6OX6GPSvxHpMUmBtoEAMGjZ1EOoVMx69mek4tZovMS2pXBn8I+rLdOdOxD/C4JG1W6VPH9a1xYVyXYSzK5IEa1WiJj6Mh+oVCNZ5LGnsrfCn0oLYpW+8JOTCFApG3G4k+euO3mbcVumn47oQNhLmzotXlhZ8/AXMMcA5oGX+w==';
+            //    var id_cabecera_asiento = 0;
+            //    $.ajax({
+            //        async: false,
+            //        type: "POST",
+            //        url: "http://localhost:81/cloudprojects/contabilidad/WS_CloudProjects.asmx/Eliminar_datos",
+            //        data: '{KeyCode: "' + keycode + '",tipo_borrado: "01/01/2050",id: "1"}',
+            //        contentType: "application/json; charset=utf-8",
+            //        dataType: "json",
+            //        success: function (data) {
+            //            //Asigno
+
+            //            alert(data.d)
+            //            //id_cabecera_asiento = data.d
+            //            //$("#lbl_id_cabecera_asiento").text(id_cabecera_asiento)
+            //        },
+            //        error: function errores(msg) { alert('Error: ' + msg.responseText); }
+            //    });
+
+            //})
+
+            ////-------------------------------------------------------------------------------------------------------------------
+            ////Control para el click
+            //$("#Button3").on('click', function (e) {
+
+            //    //1) Grabamos la cabecera de asientos
+            //    var keycode = 'EM86WpA9NPqgPinwGp4sgtPO8W75uv2OuMIrO1DLdbe976s0rtzKMVlOGz24bDPMBRPBL9iW29lQ3RZ3EA18GljagvqDYzk0NUmhUY+CTGUDiUylWHV5GlnhcLenyAueSsvzkdIgnl5yfPWZyMZpzyBga9rpjY7uF2EgC6yNavurDmy3BtNw4XWELNAK9Uum5+BTq3gs/GSLJzxhN1jHlBlkO0r93VcD6JKXf6eWo7vtFNNB3FnFOJWsHJ6uT0dIXIO9wU5Db9Np9c1FTDfqh3ipkbtWdXVvI9ibyDD95JeDMBN6ku8rDWnxqRZmrSIdAdm8EKAbmdVqeSfZ44Cr8dlLXW5GqDTohPcML6ljHjyawFGshDlWBAYdigCGoL4So+/L6yrXV1c7D/ivm+dVLKeXE6tf9Sd+VBoAeS/PiDpsT7mPNAs3wocz2bhIlNdEWA==';
+            //    var id_cabecera_asiento = 0;
+            //    $.ajax({
+            //        async: false,
+            //        type: "POST",
+            //        url: "https://www.cloudprojects.es/contabilidad/WS_CloudProjects.asmx/Grabar_cuenta",
+            //        data: '{KeyCode: "' + keycode + '",cuenta: "' + $('#txt_cuenta').val() + '",denominacion: "Prueba de denominacion",nif: ""}',
+            //        contentType: "application/json; charset=utf-8",
+            //        dataType: "json",
+            //        success: function (data) {
+            //            //Asigno
+
+            //            alert(data.d)
+            //            //id_cabecera_asiento = data.d
+            //            //$("#lbl_id_cabecera_asiento").text(id_cabecera_asiento)
+            //        },
+            //        error: function errores(msg) { alert('Error: ' + msg.responseText); }
+            //    });
+
+            //})
+
+        })
+
+    </script>
+
+    <style>
+
+        body {
+            background-color: white;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    Ejecuta API_asientos: <input id="Button1" type="button" value="button" />
+    <br />
+    Id_cabecera_asiento: <label id="lbl_id_cabecera_asiento"></label>
+    <br />
+    Ejecuta API_impuestos: <input id="Button2" type="button" value="button" />
+    <br />
+    Nº Impuesto: <label id="lbl_n_impuesto"></label>
+    <br />
+
+
+    <br />
+    <br />
+    
+    Nº Asiento: <label id="lbl_n_asiento"></label><br />
+    
+    Detalles Impuesto: <label id="lbl_detalles_impuestos"></label><br />
+    1º Linea detalle asiento: <label id="lbl_id_detalles_asiento1"></label><br />
+    2º Linea detalle asiento: <label id="lbl_id_detalles_asiento2"></label><br />
+    3º Linea detalle asiento: <label id="lbl_id_detalles_asiento3"></label><br />
+
+    <br />
+    <br />
+    Elimina (Impuesto, asiento o cartera): 
+
+    <br />
+    <br />
+    Crea Cuenta: <input id="txt_cuenta" type="text" /><input id="Button3" type="button" value="button" />
+</body>
+</html>
