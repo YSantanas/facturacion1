@@ -4,20 +4,59 @@
     CodeFile="agenda.aspx.vb" 
     Inherits="agenda_agenda" %>
 
-
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
-    <%-- GridView --%>
+<%-- Filtros rápidos con botones --%>
+<div class="row mt-3 mb-3 align-items-center">
+    <div class="col-md-8">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-outline-primary btn-filter active" data-filter="all">
+                <i class="bi bi-list"></i> Todas <span class="badge bg-secondary" id="count-all">0</span>
+            </button>
+            <button type="button" class="btn btn-outline-warning btn-filter" data-filter="pendientes">
+                <i class="bi bi-hourglass-split"></i> Pendientes <span class="badge bg-warning text-dark" id="count-pendientes">0</span>
+            </button>
+            <button type="button" class="btn btn-outline-success btn-filter" data-filter="acabadas">
+                <i class="bi bi-check-circle"></i> Acabadas <span class="badge bg-success" id="count-acabadas">0</span>
+            </button>
+            <button type="button" class="btn btn-outline-info btn-filter" data-filter="hoy">
+                <i class="bi bi-calendar-day"></i> Hoy <span class="badge bg-info text-dark" id="count-hoy">0</span>
+            </button>
+            <button type="button" class="btn btn-outline-danger btn-filter" data-filter="semana">
+                <i class="bi bi-calendar-week"></i> Esta semana <span class="badge bg-danger" id="count-semana">0</span>
+            </button>
+        </div>
+    </div>
+<div class="col-md-4">
+    <div class="d-flex gap-2">
+        <!-- Input de búsqueda -->
+        <div class="input-group flex-grow-1">
+            <span class="input-group-text">
+                <i class="bi bi-search"></i>
+            </span>
+            <input type="text" id="globalSearch" class="form-control" placeholder="Buscar en todas las columnas...">
+            <button class="btn btn-outline-secondary" type="button" id="clearSearch">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <!-- Botón Limpiar Filtros -->
+        <asp:Button ID="btnLimpiarFiltros" runat="server" CssClass="btn btn-outline-danger" Text="Limpiar Filtros Avanzados" />
+    </div>
+</div>
+
+
+
 <%-- GridView --%>
-<div class="table-container">
-<asp:GridView ID="gvCitas" runat="server"
-    CssClass="table table-bordered table-hover align-middle"
-    AutoGenerateColumns="False" 
-    DataKeyNames="id_cita"
-    OnRowDataBound="gvCitas_RowDataBound">
-    
-    <HeaderStyle CssClass="table-dark text-center" />
+<div class="table-container my-3">
+    <asp:GridView ID="gvCitas" runat="server"
+        CssClass="table table-bordered table-hover align-middle"
+        AutoGenerateColumns="False" 
+        DataKeyNames="id_cita"
+        OnRowDataBound="gvCitas_RowDataBound"
+        UseAccessibleHeader="True">
         
+        <HeaderStyle CssClass="table-dark text-center" />
         
         <Columns>
             <%-- Pendientes --%>
@@ -26,6 +65,7 @@
                     <input type="checkbox"
                            class="chkPendiente"
                            data-id='<%# Eval("id_cita") %>'
+                           data-estado="pendiente"
                            <%# If(Not Convert.ToBoolean(Eval("acabada")), "checked", "") %> />
                 </ItemTemplate>
             </asp:TemplateField>
@@ -43,35 +83,37 @@
             <%-- Fecha --%>
             <asp:BoundField DataField="fecha" HeaderText="Fecha" DataFormatString="{0:dd/MM/yyyy}" HtmlEncode="False" />
 
-            <%-- Hora - CORREGIDO --%>
+            <%-- Hora --%>
             <asp:TemplateField HeaderText="Hora">
                 <ItemTemplate>
                     <%# If(IsDBNull(Eval("hora")), "-", CType(Eval("hora"), TimeSpan).ToString("hh\:mm")) %>
                 </ItemTemplate>
             </asp:TemplateField>
 
-            <%-- Código - CORREGIDO --%>
+            <%-- Código --%>
             <asp:TemplateField HeaderText="Código">
                 <ItemTemplate>
                     <%# If(IsDBNull(Eval("codigo")), "-", Eval("codigo").ToString()) %>
                 </ItemTemplate>
             </asp:TemplateField>
 
-            <%-- Paciente (Nombre completo) - CORREGIDO --%>
+            <%-- Paciente --%>
             <asp:TemplateField HeaderText="Paciente">
                 <ItemTemplate>
                     <%# If(IsDBNull(Eval("paciente_nombre")), "", Eval("paciente_nombre").ToString()) & " " & If(IsDBNull(Eval("paciente_apellido")), "", Eval("paciente_apellido").ToString()) %>
                 </ItemTemplate>
             </asp:TemplateField>
 
-            <%-- Médico (Nombre completo) - CORREGIDO --%>
+            <%-- Médico --%>
             <asp:TemplateField HeaderText="Médico">
                 <ItemTemplate>
-                    <%# If(IsDBNull(Eval("medico_nombre")), "", Eval("medico_nombre").ToString()) & " " & If(IsDBNull(Eval("medico_apellido")), "", Eval("medico_apellido").ToString()) %>
+                    <span data-color='<%# Eval("medico_color") %>'>
+                        <%# If(IsDBNull(Eval("medico_nombre")), "", Eval("medico_nombre").ToString()) & " " & If(IsDBNull(Eval("medico_apellido")), "", Eval("medico_apellido").ToString()) %>
+                    </span>
                 </ItemTemplate>
             </asp:TemplateField>
 
-            <%-- TV - CORREGIDO --%>
+            <%-- TV --%>
             <asp:TemplateField HeaderText="TV">
                 <ItemTemplate>
                     <%# If(IsDBNull(Eval("tv")), "-", If(Convert.ToInt32(Eval("tv")) = 1, "Presencial", "Telemedicina")) %>
@@ -92,7 +134,7 @@
                 </ItemTemplate>
             </asp:TemplateField>
 
-            <%-- Observaciones - CORREGIDO --%>
+            <%-- Observaciones --%>
             <asp:TemplateField HeaderText="Observaciones">
                 <ItemTemplate>
                     <%# If(IsDBNull(Eval("observaciones")), "-", Eval("observaciones").ToString()) %>
@@ -105,11 +147,12 @@
                     <input type="checkbox"
                            class="chkAcabado"
                            data-id='<%# Eval("id_cita") %>'
+                           data-estado="acabada"
                            <%# If(Convert.ToBoolean(Eval("acabada")), "checked", "") %> />
                 </ItemTemplate>
             </asp:TemplateField>
 
-            <%-- No Citar (numero_cita) --%>
+            <%-- No Citar --%>
             <asp:TemplateField HeaderText="No Citar">
                 <ItemTemplate>
                     <input type="checkbox"
@@ -132,49 +175,54 @@
                 </ItemTemplate>
             </asp:TemplateField>
 
-            <%-- Sustituye (id_medico_sustituto) - CORREGIDO --%>
+            <%-- Sustituye --%>
             <asp:TemplateField HeaderText="Sustituye">
                 <ItemTemplate>
                     <%# If(IsDBNull(Eval("id_medico_sustituto")), "-", Eval("id_medico_sustituto").ToString()) %>
                 </ItemTemplate>
             </asp:TemplateField>
-
         </Columns>
     </asp:GridView>
-</div>
-<%-- Filtros de citas --%>
-<div class="container-fluid mt-4 mb-5">
-    <div class="card border-0 shadow-lg p-4 w-100 mx-auto" style="max-width: 1200px; border-radius: 15px;">
-        <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
-            <h4 class="mb-0 fw-bold text-primary">
-                <i class="bi bi-funnel me-2"></i>Filtros de Citas
-            </h4>
-            <asp:Button ID="btnLimpiarFiltros" runat="server" CssClass="btn btn-outline-secondary btn-sm" Text="Limpiar" />
-        </div>
 
+    
+</div>
+
+
+<%-- ⭐ Filtros Avanzados Desplegables --%>
+<div class="container-fluid mt-4 mb-5">
+    <!-- Botón de colapsar/expandir -->
+    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+        <h5 class="mb-0 fw-bold text-primary">
+            <i class="bi bi-funnel me-2"></i>Filtros Avanzados
+        </h5>
+        <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#filtrosAvanzados" aria-expanded="false" aria-controls="filtrosAvanzados">
+            <i class="bi bi-chevron-down"></i> Mostrar/Ocultar
+        </button>
+    </div>
+
+    <!-- Contenedor colapsable -->
+    <div class="collapse" id="filtrosAvanzados">
         <%-- Primera fila: Médico, Fecha, Hora --%>
         <div class="row g-3 mb-3">
-            <%-- Médico --%>
             <div class="col-12 col-lg-4">
                 <div class="filter-box p-3 bg-light rounded-3 h-100">
                     <div class="form-check mb-2">
                         <asp:CheckBox ID="chkMedico" runat="server" CssClass="form-check-input" />
-                        <label class="form-check-label fw-semibold" for="chkMedico">
+                        <label class="form-check-label fw-semibold" for="<%= chkMedico.ClientID %>">
                             <i class="bi bi-person-badge text-primary me-1"></i>Médico
                         </label>
                     </div>
                     <asp:DropDownList ID="ddlMedico" runat="server" CssClass="form-select" Enabled="False">
-                        <asp:ListItem Text="Seleccione un médico..." Value="" />
+                        <asp:ListItem Text="Seleccione un médico..." Value="0" />
                     </asp:DropDownList>
                 </div>
             </div>
 
-            <%-- Fecha --%>
             <div class="col-12 col-lg-4">
                 <div class="filter-box p-3 bg-light rounded-3 h-100">
                     <div class="form-check mb-2">
                         <asp:CheckBox ID="chkFecha" runat="server" CssClass="form-check-input" />
-                        <label class="form-check-label fw-semibold" for="chkFecha">
+                        <label class="form-check-label fw-semibold" for="<%= chkFecha.ClientID %>">
                             <i class="bi bi-calendar-event text-success me-1"></i>Rango de Fecha
                         </label>
                     </div>
@@ -186,12 +234,11 @@
                 </div>
             </div>
 
-            <%-- Hora --%>
             <div class="col-12 col-lg-4">
                 <div class="filter-box p-3 bg-light rounded-3 h-100">
                     <div class="form-check mb-2">
                         <asp:CheckBox ID="chkHora" runat="server" CssClass="form-check-input" />
-                        <label class="form-check-label fw-semibold" for="chkHora">
+                        <label class="form-check-label fw-semibold" for="<%= chkHora.ClientID %>">
                             <i class="bi bi-clock text-warning me-1"></i>Hora
                         </label>
                     </div>
@@ -202,12 +249,11 @@
 
         <%-- Segunda fila: Estados y Nombre --%>
         <div class="row g-3 mb-3">
-            <%-- Pendiente --%>
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="filter-box p-3 bg-light rounded-3 h-100">
                     <div class="form-check mb-2">
                         <asp:CheckBox ID="chkPendiente" runat="server" CssClass="form-check-input" />
-                        <label class="form-check-label fw-semibold" for="chkPendiente">
+                        <label class="form-check-label fw-semibold" for="<%= chkPendiente.ClientID %>">
                             <i class="bi bi-hourglass-split text-info me-1"></i>Pendiente
                         </label>
                     </div>
@@ -219,12 +265,11 @@
                 </div>
             </div>
 
-            <%-- Gestionada --%>
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="filter-box p-3 bg-light rounded-3 h-100">
                     <div class="form-check mb-2">
                         <asp:CheckBox ID="chkGestionada" runat="server" CssClass="form-check-input" />
-                        <label class="form-check-label fw-semibold" for="chkGestionada">
+                        <label class="form-check-label fw-semibold" for="<%= chkGestionada.ClientID %>">
                             <i class="bi bi-check-circle text-success me-1"></i>Gestionada
                         </label>
                     </div>
@@ -236,12 +281,11 @@
                 </div>
             </div>
 
-            <%-- Búsqueda por Nombre/Apellido --%>
             <div class="col-12 col-lg-6">
                 <div class="filter-box p-3 bg-light rounded-3 h-100">
                     <div class="form-check mb-2">
                         <asp:CheckBox ID="chkNombre" runat="server" CssClass="form-check-input" />
-                        <label class="form-check-label fw-semibold" for="chkNombre">
+                        <label class="form-check-label fw-semibold" for="<%= chkNombre.ClientID %>">
                             <i class="bi bi-person-search text-danger me-1"></i>Búsqueda por
                         </label>
                     </div>
@@ -257,8 +301,7 @@
         </div>
 
         <%-- Tercera fila: Ficha y Citas de paciente --%>
-        <div class="row g-3">
-            <%-- Ficha de paciente --%>
+        <div class="row g-3 mb-3">
             <div class="col-12 col-lg-6">
                 <div class="filter-box p-3 bg-light rounded-3 h-100">
                     <div class="d-flex align-items-center mb-2">
@@ -276,7 +319,6 @@
                 </div>
             </div>
 
-            <%-- Citas de paciente --%>
             <div class="col-12 col-lg-6">
                 <div class="filter-box p-3 bg-light rounded-3 h-100">
                     <div class="d-flex align-items-center mb-2">
@@ -295,22 +337,39 @@
             </div>
         </div>
 
-        <%-- Botón de búsqueda --%>
-        <div class="text-center mt-4">
-            <asp:Button ID="btnBuscar" runat="server" CssClass="btn btn-primary btn-lg px-5 shadow-sm" Text="Aplicar" />
+        <%-- Botón de aplicar --%>
+        <div class="row">
+            <div class="col-12 text-center mt-3">
+                <asp:Button ID="btnBuscar" runat="server" CssClass="btn btn-primary btn-lg px-5 shadow-sm" Text="Aplicar Filtros Avanzados" />
+            </div>
         </div>
     </div>
 </div>
 
-<%-- Estilos personalizados --%>
 
+<%-- Información de resultados --%>
+<div class="row mt-2">
+    <div class="col-12">
+        <div class="alert alert-info d-flex justify-content-between align-items-center">
+            <span>
+                Mostrando <strong id="filas-visibles">0</strong> de <strong id="filas-totales">0</strong> citas
+                <span id="filtros-avanzados-activos" class="badge bg-warning text-dark ms-2" style="display:none;">
+                    <i class="bi bi-funnel-fill"></i> Filtros avanzados aplicados
+                </span>
+                <span id="filtros-rapidos-activos" class="badge bg-primary ms-2" style="display:none;">
+                    <i class="bi bi-lightning-fill"></i> Filtro rápido activo
+                </span>
+            </span>
+        </div>
+    </div>
+</div>
+
+
+<%-- Estilos personalizados --%>
 <style>
 body {
   height: 100%;
   margin: 0;
-}
-
-body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -339,14 +398,6 @@ header {
   overflow-x: auto;
   padding: 0;
   margin: 0;
-}
-
-.dataTables_wrapper {
-  width: 100%;
-}
-
-.dataTables_scrollBody {
-  overflow-x: auto !important;
 }
 
 .filter-box {
@@ -397,138 +448,77 @@ header {
 }
 
 @keyframes checkboxPulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
 }
 
-/* ============================================ */
-/* COLORES PARA GRIDVIEW - 10 MÉDICOS */
-/* ============================================ */
-
-/* Color Azul (1) - Yvette */
-tr.bg-medico-1 td {
-  background-color: #8dafe2 !important;
-  color: #141414 !important;
-}
-tr.bg-medico-1:hover td {
-  background-color: #4370b4 !important;
+.btn-filter {
+    margin: 2px;
+    transition: all 0.3s ease;
 }
 
-/* Color Verde (2) - Miguel */
-tr.bg-medico-2 td {
-  background-color: #97ceb4 !important;
-  color: #141414 !important;
-}
-tr.bg-medico-2:hover td {
-  background-color: #569678 !important;
+.btn-filter.active {
+    background-color: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
 }
 
-/* Color Naranja (3) - Laura */
-tr.bg-medico-3 td {
-  background-color: #feba83 !important;
-  color: #141414 !important;
-}
-tr.bg-medico-3:hover td {
-  background-color: #926b4c !important;
+.btn-filter:not(.active):hover {
+    transform: translateY(-2px);
 }
 
-/* Color Rojo (4) - Carlos */
-tr.bg-medico-4 td {
-  background-color: #d55965 !important;
-  color: #141414 !important;
-}
-tr.bg-medico-4:hover td {
-  background-color: #a33e48 !important;
+.btn-filter .badge {
+    margin-left: 5px;
 }
 
-/* Color Púrpura (5) - Ana */
-tr.bg-medico-5 td {
-  background-color: #b49ae6 !important;
-  color: #141414 !important;
-}
-tr.bg-medico-5:hover td {
-  background-color: #6a588b !important;
+#globalSearch {
+    border: 2px solid #dee2e6;
+    transition: all 0.3s ease;
 }
 
-/* Color Cian (6) - David */
-tr.bg-medico-6 td {
-  background-color: #7dd3c0 !important;
-  color: #141414 !important;
-}
-tr.bg-medico-6:hover td {
-  background-color: #4a9b8a !important;
+#globalSearch:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
-/* Color Rosa (7) - Elena */
-tr.bg-medico-7 td {
-  background-color: #f5a3b5 !important;
-  color: #141414 !important;
-}
-tr.bg-medico-7:hover td {
-  background-color: #c76f82 !important;
+/* Fila oculta */
+tr.fila-oculta {
+    display: none !important;
 }
 
-/* Color Amarillo (8) - Jorge */
-tr.bg-medico-8 td {
-  background-color: #ffe082 !important;
-  color: #141414 !important;
-}
-tr.bg-medico-8:hover td {
-  background-color: #d4a954 !important;
-}
+/* Colores para 10 médicos */
+tr.bg-medico-1 td { background-color: #8dafe2 !important; color: #141414 !important; }
+tr.bg-medico-1:hover td { background-color: #4370b4 !important; }
 
-/* Color Índigo (9) - Paula */
-tr.bg-medico-9 td {
-  background-color: #9fa8da !important;
-  color: #141414 !important;
-}
-tr.bg-medico-9:hover td {
-  background-color: #6976a8 !important;
-}
+tr.bg-medico-2 td { background-color: #97ceb4 !important; color: #141414 !important; }
+tr.bg-medico-2:hover td { background-color: #569678 !important; }
 
-/* Color Marrón (10) - Ricardo */
-tr.bg-medico-10 td {
-  background-color: #bcaaa4 !important;
-  color: #141414 !important;
-}
-tr.bg-medico-10:hover td {
-  background-color: #8c7a75 !important;
-}
+tr.bg-medico-3 td { background-color: #feba83 !important; color: #141414 !important; }
+tr.bg-medico-3:hover td { background-color: #926b4c !important; }
 
-/* Color por defecto */
-tr.bg-medico-default td {
-  background-color: #e0e0e0 !important;
-  color: #141414 !important;
-}
-tr.bg-medico-default:hover td {
-  background-color: #bdbdbd !important;
-}
+tr.bg-medico-4 td { background-color: #d55965 !important; color: #141414 !important; }
+tr.bg-medico-4:hover td { background-color: #a33e48 !important; }
 
-/* Asegurar que todas las filas con colores tengan text-center */
-tr.bg-medico-1,
-tr.bg-medico-2,
-tr.bg-medico-3,
-tr.bg-medico-4,
-tr.bg-medico-5,
-tr.bg-medico-6,
-tr.bg-medico-7,
-tr.bg-medico-8,
-tr.bg-medico-9,
-tr.bg-medico-10,
-tr.bg-medico-default {
-  text-align: center !important;
-}
+tr.bg-medico-5 td { background-color: #b49ae6 !important; color: #141414 !important; }
+tr.bg-medico-5:hover td { background-color: #6a588b !important; }
 
-/* ============================================ */
+tr.bg-medico-6 td { background-color: #7dd3c0 !important; color: #141414 !important; }
+tr.bg-medico-6:hover td { background-color: #4a9b8a !important; }
 
-/* ============================================ */
+tr.bg-medico-7 td { background-color: #f5a3b5 !important; color: #141414 !important; }
+tr.bg-medico-7:hover td { background-color: #c76f82 !important; }
+
+tr.bg-medico-8 td { background-color: #ffe082 !important; color: #141414 !important; }
+tr.bg-medico-8:hover td { background-color: #d4a954 !important; }
+
+tr.bg-medico-9 td { background-color: #9fa8da !important; color: #141414 !important; }
+tr.bg-medico-9:hover td { background-color: #6976a8 !important; }
+
+tr.bg-medico-10 td { background-color: #bcaaa4 !important; color: #141414 !important; }
+tr.bg-medico-10:hover td { background-color: #8c7a75 !important; }
+
+tr.bg-medico-default td { background-color: #e0e0e0 !important; color: #141414 !important; }
+tr.bg-medico-default:hover td { background-color: #bdbdbd !important; }
 
 footer.footer {
   background-color: #465f7a !important;
@@ -543,12 +533,20 @@ footer.footer p {
 }
 </style>
 
-
-    <%-- Scripts al final del Content --%>
+<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
 <script>
 $(document).ready(function () {
-    // Activar/desactivar filtros al marcar checkboxes
+    console.log("✅ Sistema de filtros cargado");
+
+    var gridView = $('#<%= gvCitas.ClientID %>');
+    var todasLasFilas = gridView.find('tbody tr');
+    var filtrosAvanzadosActivos = <%= If(ViewState("ColorSeleccionado") IsNot Nothing OrElse ViewState("PendienteSeleccionado") IsNot Nothing OrElse ViewState("FechaInicio") IsNot Nothing OrElse ViewState("HoraSeleccionada") IsNot Nothing OrElse ViewState("GestionadaSeleccionada") IsNot Nothing OrElse ViewState("NombreBusqueda") IsNot Nothing OrElse ViewState("TipoFicha") IsNot Nothing OrElse ViewState("TipoTV") IsNot Nothing, "true", "false") %>;
+
+    // ========================================
+    // 1. ACTIVAR/DESACTIVAR FILTROS AVANZADOS
+    // ========================================
     $('#<%= chkMedico.ClientID %>').change(function () { 
         $('#<%= ddlMedico.ClientID %>').prop('disabled', !this.checked); 
     });
@@ -581,26 +579,327 @@ $(document).ready(function () {
         $('#<%= ddlTV.ClientID %>').prop('disabled', !this.checked); 
     });
 
-    // Ajax para actualizar estado de pendiente
-    $('.chkPendiente').change(function () {
+    // ========================================
+    // 2. FUNCIONES AUXILIARES
+    // ========================================
+    function getFechaHoy() {
+        var hoy = new Date();
+        return formatearFecha(hoy);
+    }
+
+    function formatearFecha(fecha) {
+        var dd = String(fecha.getDate()).padStart(2, '0');
+        var mm = String(fecha.getMonth() + 1).padStart(2, '0');
+        var yyyy = fecha.getFullYear();
+        return dd + '/' + mm + '/' + yyyy;
+    }
+
+    function getRangoSemana() {
+        var hoy = new Date();
+        var diaSemana = hoy.getDay();
+        var diff = hoy.getDate() - diaSemana + (diaSemana === 0 ? -6 : 1);
+        var primerDia = new Date(hoy.setDate(diff));
+        var ultimoDia = new Date(primerDia);
+        ultimoDia.setDate(primerDia.getDate() + 6);
         
-        var id = $(this).data('id');
-        var pendiente = $(this).is(':checked');
+        return {
+            inicio: formatearFecha(primerDia),
+            fin: formatearFecha(ultimoDia)
+        };
+    }
+
+    function parsearFecha(fechaStr) {
+        var partes = fechaStr.split('/');
+        if (partes.length === 3) {
+            return new Date(partes[2], partes[1] - 1, partes[0]);
+        }
+        return null;
+    }
+
+    function actualizarContadores() {
+        var visibles = todasLasFilas.filter(':visible').length;
+        var totales = todasLasFilas.length;
+        
+        $('#filas-visibles').text(visibles);
+        $('#filas-totales').text(totales);
+
+        // Contadores por categoría
+        var pendientes = 0, acabadas = 0, hoy = 0, semana = 0;
+        var fechaHoy = getFechaHoy();
+        var rango = getRangoSemana();
+
+        todasLasFilas.each(function() {
+            var $fila = $(this);
+            var fechaFila = $fila.find('td:eq(2)').text().trim();
+            
+            // Pendientes
+            if ($fila.find('.chkPendiente').is(':checked')) {
+                pendientes++;
+            }
+            
+            // Acabadas
+            if ($fila.find('.chkAcabado').is(':checked')) {
+                acabadas++;
+            }
+            
+            // Hoy
+            if (fechaFila === fechaHoy) {
+                hoy++;
+            }
+            
+            // Esta semana
+            var fechaObj = parsearFecha(fechaFila);
+            var fechaInicioObj = parsearFecha(rango.inicio);
+            var fechaFinObj = parsearFecha(rango.fin);
+            
+            if (fechaObj && fechaInicioObj && fechaFinObj) {
+                if (fechaObj >= fechaInicioObj && fechaObj <= fechaFinObj) {
+                    semana++;
+                }
+            }
+        });
+
+        $('#count-all').text(totales);
+        $('#count-pendientes').text(pendientes);
+        $('#count-acabadas').text(acabadas);
+        $('#count-hoy').text(hoy);
+        $('#count-semana').text(semana);
+        
+        // Mostrar indicadores de filtros activos
+        var hayBusquedaGlobal = $('#globalSearch').val().length > 0;
+        var hayFiltroRapido = !$('.btn-filter[data-filter="all"]').hasClass('active');
+        
+        if (filtrosAvanzadosActivos) {
+            $('#filtros-avanzados-activos').show();
+        } else {
+            $('#filtros-avanzados-activos').hide();
+        }
+
+        if (hayFiltroRapido || hayBusquedaGlobal) {
+            $('#filtros-rapidos-activos').show();
+        } else {
+            $('#filtros-rapidos-activos').hide();
+        }
+
+        // Mostrar botón de reseteo si hay algún filtro activo
+        if (filtrosAvanzadosActivos || hayFiltroRapido || hayBusquedaGlobal) {
+            $('#btnResetearTodo').show();
+        } else {
+            $('#btnResetearTodo').hide();
+        }
+    }
+
+    // ========================================
+    // 3. APLICAR FILTROS DEL CLIENTE
+    // ========================================
+    function aplicarFiltrosCliente() {
+        todasLasFilas.removeClass('fila-oculta').show();
+        
+        var busquedaGlobal = $('#globalSearch').val().toLowerCase();
+        
+        todasLasFilas.each(function() {
+            var $fila = $(this);
+            var mostrar = true;
+            
+            // Búsqueda global
+            if (busquedaGlobal) {
+                var textoFila = $fila.text().toLowerCase();
+                if (textoFila.indexOf(busquedaGlobal) === -1) {
+                    mostrar = false;
+                }
+            }
+            
+            if (!mostrar) {
+                $fila.addClass('fila-oculta').hide();
+            }
+        });
+        
+        actualizarContadores();
+    }
+
+    // ========================================
+    // 4. BÚSQUEDA GLOBAL
+    // ========================================
+    $('#globalSearch').on('keyup', function() {
+        aplicarFiltrosCliente();
+    });
+
+    $('#clearSearch').on('click', function() {
+        $('#globalSearch').val('');
+        aplicarFiltrosCliente();
+    });
+
+    // ========================================
+    // 5. FILTROS RÁPIDOS (BOTONES)
+    // ========================================
+    $('.btn-filter').on('click', function() {
+        // ⚠️ Advertir si hay filtros avanzados activos
+        if (filtrosAvanzadosActivos) {
+            if (!confirm('⚠️ HAY FILTROS AVANZADOS APLICADOS.\n\nLos filtros rápidos solo funcionarán sobre los resultados ya filtrados.\n\n¿Deseas continuar o prefieres limpiar los filtros avanzados primero?')) {
+                return;
+            }
+        }
+
+        var filtro = $(this).data('filter');
+        
+        // Actualizar botón activo
+        $('.btn-filter').removeClass('active');
+        $(this).addClass('active');
+        
+        // Limpiar búsqueda global
+        $('#globalSearch').val('');
+        
+        // Mostrar todas las filas primero
+        todasLasFilas.removeClass('fila-oculta').show();
+        
+        // Aplicar filtro
+        switch(filtro) {
+            case 'all':
+                console.log("🔵 Filtro: Todas las citas");
+                break;
+                
+            case 'pendientes':
+                todasLasFilas.each(function() {
+                    var checkbox = $(this).find('.chkPendiente');
+                    if (!checkbox.is(':checked')) {
+                        $(this).addClass('fila-oculta').hide();
+                    }
+                });
+                console.log("🟡 Filtro: Pendientes");
+                break;
+                
+            case 'acabadas':
+                todasLasFilas.each(function() {
+                    var checkbox = $(this).find('.chkAcabado');
+                    if (!checkbox.is(':checked')) {
+                        $(this).addClass('fila-oculta').hide();
+                    }
+                });
+                console.log("🟢 Filtro: Acabadas");
+                break;
+                
+            case 'hoy':
+                var fechaHoy = getFechaHoy();
+                todasLasFilas.each(function() {
+                    var fechaFila = $(this).find('td:eq(2)').text().trim();
+                    if (fechaFila !== fechaHoy) {
+                        $(this).addClass('fila-oculta').hide();
+                    }
+                });
+                console.log("🔵 Filtro: Hoy (" + fechaHoy + ")");
+                break;
+                
+            case 'semana':
+                var rango = getRangoSemana();
+                var fechaInicio = parsearFecha(rango.inicio);
+                var fechaFin = parsearFecha(rango.fin);
+                
+                todasLasFilas.each(function() {
+                    var fechaStr = $(this).find('td:eq(2)').text().trim();
+                    var fechaFila = parsearFecha(fechaStr);
+                    
+                    if (!fechaFila || fechaFila < fechaInicio || fechaFila > fechaFin) {
+                        $(this).addClass('fila-oculta').hide();
+                    }
+                });
+                console.log("🔵 Filtro: Esta semana (" + rango.inicio + " - " + rango.fin + ")");
+                break;
+        }
+        
+        actualizarContadores();
+    });
+
+    // ========================================
+    // 6. BOTÓN RESETEAR TODO
+    // ========================================
+    $('#btnResetearTodo').on('click', function() {
+        if (filtrosAvanzadosActivos) {
+            if (confirm('Esto limpiará TODOS los filtros (avanzados y rápidos) y recargará la página. ¿Continuar?')) {
+                // Hacer clic en el botón de limpiar filtros avanzados
+                $('#<%= btnLimpiarFiltros.ClientID %>').click();
+            }
+        } else {
+            // Solo limpiar filtros del cliente
+            $('#globalSearch').val('');
+            $('.btn-filter[data-filter="all"]').click();
+        }
+    });
+
+    // ========================================
+    // 7. EVENTOS AJAX PARA CHECKBOXES
+    // ========================================
+    function aplicarEventosCheckboxes() {
+        $('.chkPendiente').off('change').on('change', function () {
+            actualizarCheckbox($(this), 'ActualizarPendiente', 'pendiente', 'Pendiente');
+        });
+
+        $('.chkEmitido').off('change').on('change', function () {
+            actualizarCheckbox($(this), 'ActualizarEmitido', 'emitido', 'Emitido');
+        });
+
+        $('.chkAcabado').off('change').on('change', function () {
+            actualizarCheckbox($(this), 'ActualizarAcabada', 'acabada', 'Acabada');
+        });
+
+        $('.chkNC').off('change').on('change', function () {
+            actualizarCheckbox($(this), 'ActualizarNumeroCita', 'numeroCita', 'No Citar');
+        });
+
+        $('.chkSM').off('change').on('change', function () {
+            actualizarCheckbox($(this), 'ActualizarSM', 'sm', 'S.M.');
+        });
+    }
+
+    function actualizarCheckbox($checkbox, metodo, parametro, nombreCampo) {
+        var id = $checkbox.data('id');
+        var valor = $checkbox.is(':checked');
+        
+        $checkbox.prop('disabled', true);
+
+        var data = { id: id };
+        data[parametro] = valor;
 
         $.ajax({
             type: "POST",
-            url: "agenda.aspx/ActualizarPendiente",
-            data: JSON.stringify({ id: id, pendiente: pendiente }),
+            url: "agenda.aspx/" + metodo,
+            data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (res) {
-                if (res.d) console.log("Estado actualizado");
+                if (res.d) {
+                    console.log("✅ " + nombreCampo + " actualizado (ID: " + id + ")");
+                    $checkbox.closest('tr').fadeOut(100).fadeIn(100);
+                    
+                    // Actualizar contadores después de cambio
+                    setTimeout(actualizarContadores, 200);
+                } else {
+                    alert("Error al actualizar " + nombreCampo);
+                    $checkbox.prop('checked', !valor);
+                }
             },
-            error: function () { alert("Error al actualizar el estado"); }
+            error: function (xhr, status, error) {
+                console.error("❌ Error al actualizar " + nombreCampo + ":", error);
+                alert("Error de conexión al actualizar " + nombreCampo);
+                $checkbox.prop('checked', !valor);
+            },
+            complete: function() {
+                $checkbox.prop('disabled', false);
+            }
         });
-    });
+    }
+
+    // ========================================
+    // 8. INICIALIZAR
+    // ========================================
+    aplicarEventosCheckboxes();
+    actualizarContadores();
+    
+    // Si hay filtros avanzados activos, mostrar advertencia
+    if (filtrosAvanzadosActivos) {
+        console.log("⚠️ Filtros avanzados detectados. Los filtros rápidos funcionarán sobre estos resultados.");
+    }
+    
+    console.log("✅ Sistema listo. Total de citas:", todasLasFilas.length);
 });
 </script>
-
 </asp:Content>
-
